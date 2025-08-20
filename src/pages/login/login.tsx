@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, FormEvent, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
 import { loginUser, selectLoginUserError } from '../../services/userSlice';
@@ -9,7 +9,7 @@ export const Login: FC = () => {
   const dispatch = useDispatch();
   const loginUserError = useSelector(selectLoginUserError);
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password) {
       return;

@@ -5,6 +5,7 @@ import { TIngredient } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import {
+  clearModal,
   fetchOrderByNumber,
   selectOrder,
   setId

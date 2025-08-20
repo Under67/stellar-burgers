@@ -44,61 +44,75 @@ const App = () => {
 
   return (
     <div className={styles.app}>
+      <AppHeader />
+
       <Routes location={background || location}>
-        <Route path='/' element={<AppHeader />}>
-          <Route index element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
-          <Route
-            path='/login'
-            element={
-              <ProtectedRoute onlyUnAuth>
-                <Login />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/register'
-            element={
-              <ProtectedRoute onlyUnAuth>
-                <Register />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/forgot-password'
-            element={
-              <ProtectedRoute onlyUnAuth>
-                <ForgotPassword />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/reset-password'
-            element={
-              <ProtectedRoute onlyUnAuth>
-                <ResetPassword />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/profile'
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/profile/orders'
-            element={
-              <ProtectedRoute>
-                <ProfileOrders />
-              </ProtectedRoute>
-            }
-          />
-          <Route path='*' element={<NotFound404 />} />
-        </Route>
+        <Route index element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<NotFound404 />} />
+
+        {/* Прямой доступ к модалкам */}
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
+      {/* Модалки при клике внутри приложения */}
       {background && (
         <Routes>
           <Route
@@ -116,7 +130,7 @@ const App = () => {
             path='/ingredients/:id'
             element={
               <Modal
-                title={'Детали ингредиента'}
+                title='Детали ингредиента'
                 onClose={() => {
                   navigate(background.pathname, { replace: true });
                   dispatch(clearModal());
