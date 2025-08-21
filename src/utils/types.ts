@@ -38,3 +38,13 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
+
+export type TUserState = {
+  isAuthChecked: boolean;
+  isAuthenticated: boolean;
+  data: null | TUser;
+  loginUserError: string | undefined;
+  loginUserRequest: boolean;
+  registerUserError: string | undefined;
+  registerUserRequest: boolean;
+};
