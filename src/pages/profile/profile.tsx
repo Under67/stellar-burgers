@@ -5,30 +5,36 @@ import { selectUserData, updateUser } from '../../services/userSlice';
 import { TUser } from '@utils-types';
 
 export const Profile: FC = () => {
-  const data = useSelector(selectUserData) as TUser;
+  const data = useSelector(selectUserData) as TUser | null;
   const dispatch = useDispatch();
 
-  const [formValue, setFormValue] = useState({
-    name: data.name || '',
-    email: data.email || '',
+  // Дефолтные значения на случай, если data еще нет
+  const initialFormValue = {
+    name: data?.name || '',
+    email: data?.email || '',
     password: ''
-  });
+  };
+
+  const [formValue, setFormValue] = useState(initialFormValue);
 
   useEffect(() => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      name: data?.name || '',
-      email: data?.email || ''
-    }));
+    if (data) {
+      setFormValue({
+        name: data.name,
+        email: data.email,
+        password: ''
+      });
+    }
   }, [data]);
 
   const isFormChanged =
-    formValue.name !== data?.name ||
-    formValue.email !== data?.email ||
+    formValue.name !== (data?.name || '') ||
+    formValue.email !== (data?.email || '') ||
     !!formValue.password;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    if (!data) return; // безопасная проверка
     dispatch(updateUser(formValue));
     setFormValue({
       name: data.name,
@@ -39,6 +45,7 @@ export const Profile: FC = () => {
 
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
+    if (!data) return; // безопасная проверка
     setFormValue({
       name: data.name,
       email: data.email,

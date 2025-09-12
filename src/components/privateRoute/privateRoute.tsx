@@ -17,7 +17,6 @@ export const ProtectedRoute = ({
   if (!isAuthChecked) {
     return <Preloader />;
   }
-
   if (onlyUnAuth && isAuth) {
     return <Navigate to='/' replace />;
   }
