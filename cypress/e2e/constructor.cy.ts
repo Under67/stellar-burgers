@@ -73,7 +73,6 @@ beforeEach(() => {
       cy.get('[data-cy="oneBun"]').should('have.text', 'Выберите булки')
       cy.get('[data-cy="twoBun"]').should('have.text', 'Выберите булки')
       cy.get('[data-cy="filling"]').should('have.text', 'Выберите начинку')
-      
     });
   })
 });
