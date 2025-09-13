@@ -26,6 +26,16 @@ export type TOrder = {
   ingredients: string[];
 };
 
+export type TResponseOrder = {
+  _id: string;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  ingredients: TIngredient[];
+};
+
 export type TOrdersData = {
   orders: TOrder[];
   total: number;
@@ -40,6 +50,8 @@ export type TUser = {
 export type TTabMode = 'bun' | 'sauce' | 'main';
 
 export type TUserState = {
+  refreshUserRequest?: boolean;
+  refreshUserError?: string;
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   data: null | TUser;

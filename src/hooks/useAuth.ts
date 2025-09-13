@@ -1,30 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../services/store';
 import { fetchUser, refreshUser } from '../services/userSlice';
+import { getCookie } from '../utils/cookie';
+
+let authCheckedGlobal = false;
 
 export const useAuth = () => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const refreshToken = localStorage.getItem('refreshToken');
+    if (authCheckedGlobal) return;
+    authCheckedGlobal = true;
 
+    const checkAuth = async () => {
       try {
-        if (refreshToken) {
+        const accessToken = getCookie('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        if (accessToken) {
+          // Есть действующий accessToken → просто fetchUser
+          await dispatch(fetchUser()).unwrap();
+        } else if (refreshToken) {
+          // Нет accessToken → обновляем
           await dispatch(refreshUser()).unwrap();
+          await dispatch(fetchUser()).unwrap();
         }
-        await dispatch(fetchUser()).unwrap();
+        // Если нет токенов — не делаем ничего, пользователь не авторизован
       } catch {
-        // Игнорируем ошибки, пользователь будет неавторизован
-      } finally {
-        setIsAuthChecked(true);
+        // Игнорируем ошибки
       }
     };
 
     checkAuth();
   }, [dispatch]);
 
-  return { isAuth: isAuthenticated, isAuthChecked };
+  return { isAuth: isAuthenticated, isAuthChecked: true };
 };

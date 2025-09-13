@@ -8,7 +8,6 @@ import {
   TLoginData,
   TRegisterData,
   TServerResponse,
-  TUserResponse,
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -23,7 +22,9 @@ const initialState: TUserState = {
   loginUserError: undefined,
   loginUserRequest: false,
   registerUserError: undefined,
-  registerUserRequest: false
+  registerUserRequest: false,
+  refreshUserRequest: false,
+  refreshUserError: undefined
 };
 
 export const loginUser = createAsyncThunk<
@@ -149,7 +150,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginUserRequest = false;
-        state.loginUserError = action.payload ?? 'Неизвестная ошибка';
+        state.loginUserError = action.error.message;
         state.isAuthChecked = true;
       })
       .addCase(registerUser.pending, (state) => {
@@ -164,8 +165,12 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.registerUserRequest = false;
-        state.registerUserError = action.payload ?? 'Неизвестная ошибка';
+        state.registerUserError = action.error.message;
         state.isAuthChecked = true;
+      })
+      .addCase(fetchUser.pending, (state) => {
+        state.isAuthChecked = false;
+        state.data = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.data = action.payload;
@@ -177,14 +182,21 @@ export const userSlice = createSlice({
         state.isAuthenticated = false;
         state.isAuthChecked = true;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {
-        state.data = action.payload.user as TUser;
+      .addCase(refreshUser.pending, (state) => {
+        state.refreshUserRequest = true;
+        state.refreshUserError = undefined;
+      })
+      .addCase(refreshUser.fulfilled, (state) => {
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+        state.refreshUserRequest = false;
       })
-      .addCase(refreshUser.rejected, (state) => {
+      .addCase(refreshUser.rejected, (state, action) => {
         state.isAuthChecked = true;
+        state.refreshUserRequest = false;
+        state.refreshUserError = action.error.message;
       })
+
       .addCase(logoutUser.fulfilled, (state) => {
         state.data = null;
         state.isAuthenticated = false;
@@ -199,7 +211,7 @@ export const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.loginUserError = action.payload ?? 'Неизвестная ошибка';
+        state.loginUserError = action.error.message;
       });
   }
 });

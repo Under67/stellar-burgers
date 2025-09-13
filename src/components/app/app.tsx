@@ -17,8 +17,6 @@ import { ProtectedRoute } from '../privateRoute/privateRoute';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/ingredientsSlice';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchFeeds } from '../../services/feedSlice';
-import { fetchUser, refreshUser } from '../../services/userSlice';
 import { clearModal, selectOrderId } from '../../services/orderSlice';
 
 const App = () => {
@@ -30,16 +28,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(fetchFeeds());
-
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken) {
-      dispatch(refreshUser()).then(() => {
-        dispatch(fetchUser());
-      });
-    } else {
-      dispatch(fetchUser());
-    }
   }, [dispatch]);
 
   return (
