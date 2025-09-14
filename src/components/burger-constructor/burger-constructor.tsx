@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react';
-import { TIngredient } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
+import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from '../../services/store';
 import { ingredientItems } from '../../services/ingredientsSlice';
 import {
@@ -29,10 +30,13 @@ export const BurgerConstructor: FC = () => {
     const bun =
       Ingredients.find((i) => i._id === bunId && i.type === 'bun') || null;
 
-    const ingredients: TIngredient[] = newOrder
+    const ingredients: TConstructorIngredient[] = newOrder
       .filter((id) => id !== bunId)
-      .map((id) => Ingredients.find((i) => i._id === id))
-      .filter((i): i is TIngredient => i !== undefined);
+      .map((id) => {
+        const ingredient = Ingredients.find((i) => i._id === id);
+        return ingredient ? { ...ingredient, id: uuid() } : undefined;
+      })
+      .filter((i): i is TConstructorIngredient => i !== undefined);
 
     return { bun, ingredients };
   }, [newOrder, Ingredients]);

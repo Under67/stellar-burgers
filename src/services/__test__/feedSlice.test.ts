@@ -2,18 +2,10 @@ import { expect, test, describe, jest, beforeEach } from '@jest/globals';
 import { feedsSlice, FeedsState, fetchFeeds } from '../feedSlice';
 import { mockFetchFeeds } from './mockData';
 
-jest.mock('@api');
-
 describe('feedSlice test', () => {
   let initialState: FeedsState;
   beforeEach(() => {
-    initialState = {
-      orders: [],
-      total: 0,
-      totalToday: 0,
-      isLoading: false,
-      error: undefined
-    };
+    initialState = feedsSlice.getInitialState();
   });
   test('fetchFeeds.pending', () => {
     const newState = feedsSlice.reducer(

@@ -26,17 +26,7 @@ jest.mock('@api');
 describe('userSlice test', () => {
   let initialState: TUserState;
   beforeEach(() => {
-    initialState = {
-      isAuthChecked: false,
-      isAuthenticated: false,
-      data: null,
-      loginUserError: undefined,
-      loginUserRequest: false,
-      registerUserError: undefined,
-      registerUserRequest: false,
-      refreshUserRequest: false,
-      refreshUserError: undefined
-    };
+    initialState = userSlice.getInitialState();
   });
   beforeAll(() => {
     if (!global.document) {

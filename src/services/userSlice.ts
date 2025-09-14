@@ -39,8 +39,8 @@ export const loginUser = createAsyncThunk<
     setCookie('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка, сервер недоступен');
+  } catch (error) {
+    return rejectWithValue('Ошибка, сервер недоступен');
   }
 });
 
@@ -58,8 +58,8 @@ export const registerUser = createAsyncThunk<
       setCookie('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error?.message || 'Ошибка, сервер недоступен');
+    } catch (error) {
+      return rejectWithValue('Ошибка, сервер недоступен');
     }
   }
 );
@@ -72,10 +72,8 @@ export const fetchUser = createAsyncThunk<TUser, void, { rejectValue: string }>(
       if (!data.success)
         return rejectWithValue(data.message || 'Ошибка получения пользователя');
       return data.user;
-    } catch (error: any) {
-      return rejectWithValue(
-        error?.message || 'Ошибка при получении пользователя'
-      );
+    } catch (error) {
+      return rejectWithValue('Ошибка при получении пользователя');
     }
   }
 );
@@ -90,8 +88,8 @@ export const refreshUser = createAsyncThunk<
     localStorage.setItem('refreshToken', data.refreshToken);
     setCookie('accessToken', data.accessToken);
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка обновления токена');
+  } catch (error) {
+    return rejectWithValue('Ошибка обновления токена');
   }
 });
 
@@ -105,8 +103,8 @@ export const logoutUser = createAsyncThunk<
     if (!data.success)
       return rejectWithValue(data.message || 'Ошибка выхода из системы');
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка при выходе из системы');
+  } catch (error) {
+    return rejectWithValue('Ошибка при выходе из системы');
   }
 });
 
@@ -120,10 +118,8 @@ export const updateUser = createAsyncThunk<
     if (!data.success)
       return rejectWithValue(data.message || 'Ошибка обновления пользователя');
     return data.user;
-  } catch (error: any) {
-    return rejectWithValue(
-      error?.message || 'Ошибка при обновлении пользователя'
-    );
+  } catch (error) {
+    return rejectWithValue('Ошибка при обновлении пользователя');
   }
 });
 

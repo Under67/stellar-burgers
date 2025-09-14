@@ -11,11 +11,7 @@ jest.mock('@api');
 describe('ingredients test', () => {
   let initialState: IngredientsState;
   beforeEach(() => {
-    initialState = {
-      items: [],
-      isLoading: false,
-      error: undefined
-    };
+    initialState = ingredientsSlice.getInitialState();
   });
   test('fetchIngredients.pending', () => {
     const newState = ingredientsSlice.reducer(

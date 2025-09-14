@@ -4,6 +4,7 @@ import ordersSliceReducer, {
   fetchOrderByNumber,
   fetchUserOrders,
   moveIngredient,
+  ordersSlice,
   removeIngredient,
   UserOrdersState
 } from '../orderSlice';
@@ -21,18 +22,7 @@ jest.mock('@api');
 describe('actions test', () => {
   let initialState: UserOrdersState;
   beforeEach(() => {
-    initialState = {
-      orders: [],
-      order: null,
-      isLoadingOrders: false,
-      isLoadingOrder: false,
-      isLoadingNewOrder: false,
-      errorOrders: undefined,
-      errorOrder: undefined,
-      orderId: null,
-      newOrder: [],
-      success: null
-    };
+    initialState = ordersSlice.getInitialState();
   });
   describe('synchronous actions', () => {
     test('addIngredient', () => {

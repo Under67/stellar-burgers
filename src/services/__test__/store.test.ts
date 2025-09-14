@@ -24,38 +24,9 @@ describe('rootReducer initialization', () => {
   }),
     test('rootReducer', () => {
       const state = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
-      expect(state).toEqual({
-        feed: {
-          error: undefined,
-          isLoading: false,
-          orders: [],
-          total: 0,
-          totalToday: 0
-        },
-        ingredient: { error: undefined, isLoading: false, items: [] },
-        order: {
-          errorOrder: undefined,
-          errorOrders: undefined,
-          isLoadingNewOrder: false,
-          isLoadingOrder: false,
-          isLoadingOrders: false,
-          newOrder: [],
-          order: null,
-          orderId: null,
-          orders: [],
-          success: null
-        },
-        user: {
-          data: null,
-          isAuthChecked: false,
-          isAuthenticated: false,
-          loginUserError: undefined,
-          loginUserRequest: false,
-          refreshUserError: undefined,
-          refreshUserRequest: false,
-          registerUserError: undefined,
-          registerUserRequest: false
-        }
-      });
+      expect(state.user).toEqual(userSlice.getInitialState());
+      expect(state.ingredient).toEqual(ingredientsSlice.getInitialState());
+      expect(state.feed).toEqual(feedsSlice.getInitialState());
+      expect(state.order).toEqual(ordersSlice.getInitialState());
     });
 });

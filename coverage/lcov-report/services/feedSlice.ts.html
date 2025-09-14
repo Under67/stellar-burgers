@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.16% </span>
+                <span class="strong">91.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>45/67</span>
+                <span class='fraction'>61/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.16% </span>
+                <span class="strong">91.04% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>45/67</span>
+                <span class='fraction'>61/67</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -169,28 +169,28 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -236,28 +236,28 @@ export const feedsSlice = createSlice({
   extraReducers: (builder) =&gt; {
     builder
       .addCase(fetchFeeds.pending, (state) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.isLoading = true;</span>
-<span class="cstat-no" title="statement not covered" >        state.error = undefined;</span>
+        state.isLoading = true;
+        state.error = undefined;
       })
       .addCase(
         fetchFeeds.fulfilled,
         (
-<span class="cstat-no" title="statement not covered" >          state,</span>
-<span class="cstat-no" title="statement not covered" >          action: PayloadAction&lt;{</span>
-<span class="cstat-no" title="statement not covered" >            orders: TOrder[];</span>
-<span class="cstat-no" title="statement not covered" >            total: number;</span>
-<span class="cstat-no" title="statement not covered" >            totalToday: number;</span>
-<span class="cstat-no" title="statement not covered" >          }&gt;</span>
-<span class="cstat-no" title="statement not covered" >        ) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          state.orders = action.payload.orders;</span>
-<span class="cstat-no" title="statement not covered" >          state.total = action.payload.total;</span>
-<span class="cstat-no" title="statement not covered" >          state.totalToday = action.payload.totalToday;</span>
-<span class="cstat-no" title="statement not covered" >          state.isLoading = false;</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+          state,
+          action: PayloadAction&lt;{
+            orders: TOrder[];
+            total: number;
+            totalToday: number;
+          }&gt;
+        ) =&gt; {
+          state.orders = action.payload.orders;
+          state.total = action.payload.total;
+          state.totalToday = action.payload.totalToday;
+          state.isLoading = false;
+        }
       )
       .addCase(fetchFeeds.rejected, (state, action) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.isLoading = false;</span>
-<span class="cstat-no" title="statement not covered" >        state.error = action.error.message;</span>
+        state.isLoading = false;
+        state.error = action.error.message;
       });
   }
 });
@@ -271,7 +271,7 @@ export const selectFeed = <span class="fstat-no" title="function not covered" >(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-13T21:59:12.764Z
+                at 2025-09-14T11:23:56.213Z
             </div>
         <script src="../prettify.js"></script>
         <script>
