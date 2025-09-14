@@ -57,7 +57,7 @@ afterEach(() => {
     cy.clearLocalStorage();
 })
   it('should display correct ingredient details in the modal', () => {
-      cy.get('[data-cy="643d69a5c3f7b9001cfa093c"').find('a').click();
+      cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').find('a').click();
       cy.get('[data-cy="modal"]').should('exist');
       cy.get('[data-cy="modal-details"]').should('have.text', 'Детали ингредиента')
       cy.get('[data-cy="modal-details-img"]')
@@ -69,11 +69,11 @@ afterEach(() => {
       cy.get('[data-cy="modal-details-carbohydrates"]').should('have.text', '53');
     });
   it('should open ingredient modal and close it by clicking the "X" button',() => { 
-    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"').find('a').click();
+    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').find('a').click();
     cy.get('[data-cy="modal-close"]').click();
   }),
   it('should open ingredient modal and close it by clicking on the overlay',() => { 
-    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"').find('a').click();
+    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').find('a').click();
     cy.get('[data-cy="modal-overlay"]').click({ force: true });
     })
   it('should create an order with selected ingredients and reset the constructor after closing modal', () => {
@@ -83,8 +83,8 @@ afterEach(() => {
         body: order
       }).as('createOrder');
     });
-    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"').find('button').click();
-    cy.get('[data-cy="643d69a5c3f7b9001cfa0945"').find('button').click();
+    cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').find('button').click();
+    cy.get('[data-cy="643d69a5c3f7b9001cfa0945"]').find('button').click();
     cy.get('.button_type_primary').click();
     cy.wait('@createOrder').then((intercept: IInterceptedOrder) => {
         const request = intercept.request.body as ICreateOrderRequest;
@@ -104,11 +104,11 @@ afterEach(() => {
     });
   })
     it('Ingredient is added to burger constructor when clicking on its card', () => {
-      cy.get('[data-cy="643d69a5c3f7b9001cfa093c"').find('button').click();
-      cy.get('[data-cy="643d69a5c3f7b9001cfa0945"').find('button').click();
+      cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').find('button').click();
+      cy.get('[data-cy="643d69a5c3f7b9001cfa0945"]').find('button').click();
       cy.contains('Краторная булка N-200i (верх)').should('exist');
       cy.contains('Краторная булка N-200i (низ)').should('exist');
-      cy.get('*').filter((index, el) => el.innerText === 'Соус с шипами Антарианского плоскоходца')
+      cy.get('*').filter((_, el) => el.innerText === 'Соус с шипами Антарианского плоскоходца')
   .should('have.length', 2);
     })
 });
