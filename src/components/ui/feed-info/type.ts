@@ -1,5 +1,8 @@
+import { TOrder } from '@utils-types';
+import { FeedsState } from 'src/services/feedSlice';
+
 export type FeedInfoUIProps = {
-  feed: any;
+  feed: FeedsState;
   readyOrders: number[];
   pendingOrders: number[];
 };

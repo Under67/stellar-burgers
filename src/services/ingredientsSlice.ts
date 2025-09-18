@@ -3,16 +3,16 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import { RootState } from './store';
 
-interface IngredientsState {
+export interface IngredientsState {
   items: TIngredient[];
   isLoading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: IngredientsState = {
   items: [],
   isLoading: false,
-  error: null
+  error: undefined
 };
 
 export const fetchIngredients = createAsyncThunk<
@@ -35,7 +35,7 @@ export const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(
         fetchIngredients.fulfilled,
@@ -46,7 +46,7 @@ export const ingredientsSlice = createSlice({
       )
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload ?? 'Ошибка';
+        state.error = action.error.message;
       });
   }
 });

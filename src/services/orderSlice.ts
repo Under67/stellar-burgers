@@ -3,22 +3,23 @@ import {
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi,
-  TNewOrderResponse
+  TNewOrder,
+  TOrdersResponse
 } from '../utils/burger-api';
 import { TOrder, TIngredient } from '../utils/types';
 import { RootState } from './store';
 
-interface UserOrdersState {
+export interface UserOrdersState {
   orders: TOrder[];
   order: TOrder | null;
   isLoadingOrders: boolean;
   isLoadingOrder: boolean;
   isLoadingNewOrder: boolean;
-  errorOrders: string | null;
-  errorOrder: string | null;
+  errorOrders: string | undefined;
+  errorOrder: string | undefined;
   orderId: string | null;
   newOrder: string[];
-  success: TOrder | null;
+  success: number | null;
 }
 
 const initialState: UserOrdersState = {
@@ -27,8 +28,8 @@ const initialState: UserOrdersState = {
   isLoadingOrders: false,
   isLoadingOrder: false,
   isLoadingNewOrder: false,
-  errorOrders: null,
-  errorOrder: null,
+  errorOrders: undefined,
+  errorOrder: undefined,
   orderId: null,
   newOrder: [],
   success: null
@@ -47,7 +48,7 @@ export const fetchUserOrders = createAsyncThunk(
 );
 
 export const fetchOrder = createAsyncThunk<
-  TNewOrderResponse,
+  TNewOrder,
   string[],
   { rejectValue: string }
 >('orders/fetchOrder', async (order, { rejectWithValue }) => {
@@ -100,9 +101,11 @@ export const ordersSlice = createSlice({
 
     moveIngredient: (
       state,
-      action: PayloadAction<{ index: number; direction: 'up' | 'down' }>
+      action: PayloadAction<{ burgerId: string; direction: 'up' | 'down' }>
     ) => {
-      const { index, direction } = action.payload;
+      const { burgerId, direction } = action.payload;
+      const index = state.newOrder.indexOf(burgerId);
+
       const newIndex = direction === 'up' ? index - 1 : index + 1;
 
       if (newIndex < 0 || newIndex >= state.newOrder.length) return;
@@ -123,7 +126,7 @@ export const ordersSlice = createSlice({
     builder
       .addCase(fetchUserOrders.pending, (state) => {
         state.isLoadingOrders = true;
-        state.errorOrders = null;
+        state.errorOrders = undefined;
       })
       .addCase(
         fetchUserOrders.fulfilled,
@@ -134,32 +137,32 @@ export const ordersSlice = createSlice({
       )
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.isLoadingOrders = false;
-        state.errorOrders = action.payload as string;
+        state.errorOrders = action.error.message;
       })
       .addCase(fetchOrderByNumber.pending, (state) => {
         state.isLoadingOrder = true;
-        state.errorOrder = null;
+        state.errorOrder = undefined;
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.order = action.payload.orders[0] ?? null;
+        state.order = action.payload.orders[0];
         state.isLoadingOrder = false;
       })
       .addCase(fetchOrderByNumber.rejected, (state, action) => {
         state.isLoadingOrder = false;
-        state.errorOrder = action.payload as string;
+        state.errorOrder = action.error.message;
       })
       .addCase(fetchOrder.pending, (state) => {
         state.isLoadingNewOrder = true;
-        state.errorOrder = null;
+        state.errorOrder = undefined;
       })
       .addCase(fetchOrder.fulfilled, (state, action) => {
         state.newOrder = [];
         state.isLoadingNewOrder = false;
-        state.success = action.payload.order;
+        state.success = action.payload.order.number;
       })
       .addCase(fetchOrder.rejected, (state, action) => {
         state.isLoadingNewOrder = false;
-        state.errorOrder = action.payload as string;
+        state.errorOrder = action.error.message;
       });
   }
 });

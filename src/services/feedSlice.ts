@@ -3,12 +3,12 @@ import { getFeedsApi } from '../utils/burger-api';
 import { TOrder } from '../utils/types';
 import { RootState } from './store';
 
-interface FeedsState {
+export interface FeedsState {
   orders: TOrder[];
   total: number;
   totalToday: number;
   isLoading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: FeedsState = {
@@ -16,7 +16,7 @@ const initialState: FeedsState = {
   total: 0,
   totalToday: 0,
   isLoading: false,
-  error: null
+  error: undefined
 };
 
 export const fetchFeeds = createAsyncThunk(
@@ -38,6 +38,7 @@ export const feedsSlice = createSlice({
     builder
       .addCase(fetchFeeds.pending, (state) => {
         state.isLoading = true;
+        state.error = undefined;
       })
       .addCase(
         fetchFeeds.fulfilled,
@@ -57,7 +58,7 @@ export const feedsSlice = createSlice({
       )
       .addCase(fetchFeeds.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message;
       });
   }
 });

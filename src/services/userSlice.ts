@@ -8,7 +8,6 @@ import {
   TLoginData,
   TRegisterData,
   TServerResponse,
-  TUserResponse,
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -23,7 +22,9 @@ const initialState: TUserState = {
   loginUserError: undefined,
   loginUserRequest: false,
   registerUserError: undefined,
-  registerUserRequest: false
+  registerUserRequest: false,
+  refreshUserRequest: false,
+  refreshUserError: undefined
 };
 
 export const loginUser = createAsyncThunk<
@@ -38,8 +39,8 @@ export const loginUser = createAsyncThunk<
     setCookie('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка, сервер недоступен');
+  } catch (error) {
+    return rejectWithValue('Ошибка, сервер недоступен');
   }
 });
 
@@ -57,8 +58,8 @@ export const registerUser = createAsyncThunk<
       setCookie('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error?.message || 'Ошибка, сервер недоступен');
+    } catch (error) {
+      return rejectWithValue('Ошибка, сервер недоступен');
     }
   }
 );
@@ -71,10 +72,8 @@ export const fetchUser = createAsyncThunk<TUser, void, { rejectValue: string }>(
       if (!data.success)
         return rejectWithValue(data.message || 'Ошибка получения пользователя');
       return data.user;
-    } catch (error: any) {
-      return rejectWithValue(
-        error?.message || 'Ошибка при получении пользователя'
-      );
+    } catch (error) {
+      return rejectWithValue('Ошибка при получении пользователя');
     }
   }
 );
@@ -89,8 +88,8 @@ export const refreshUser = createAsyncThunk<
     localStorage.setItem('refreshToken', data.refreshToken);
     setCookie('accessToken', data.accessToken);
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка обновления токена');
+  } catch (error) {
+    return rejectWithValue('Ошибка обновления токена');
   }
 });
 
@@ -104,8 +103,8 @@ export const logoutUser = createAsyncThunk<
     if (!data.success)
       return rejectWithValue(data.message || 'Ошибка выхода из системы');
     return data;
-  } catch (error: any) {
-    return rejectWithValue(error?.message || 'Ошибка при выходе из системы');
+  } catch (error) {
+    return rejectWithValue('Ошибка при выходе из системы');
   }
 });
 
@@ -119,10 +118,8 @@ export const updateUser = createAsyncThunk<
     if (!data.success)
       return rejectWithValue(data.message || 'Ошибка обновления пользователя');
     return data.user;
-  } catch (error: any) {
-    return rejectWithValue(
-      error?.message || 'Ошибка при обновлении пользователя'
-    );
+  } catch (error) {
+    return rejectWithValue('Ошибка при обновлении пользователя');
   }
 });
 
@@ -149,7 +146,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginUserRequest = false;
-        state.loginUserError = action.payload ?? 'Неизвестная ошибка';
+        state.loginUserError = action.error.message;
         state.isAuthChecked = true;
       })
       .addCase(registerUser.pending, (state) => {
@@ -164,8 +161,12 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.registerUserRequest = false;
-        state.registerUserError = action.payload ?? 'Неизвестная ошибка';
+        state.registerUserError = action.error.message;
         state.isAuthChecked = true;
+      })
+      .addCase(fetchUser.pending, (state) => {
+        state.isAuthChecked = false;
+        state.data = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.data = action.payload;
@@ -177,14 +178,21 @@ export const userSlice = createSlice({
         state.isAuthenticated = false;
         state.isAuthChecked = true;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {
-        state.data = action.payload.user as TUser;
+      .addCase(refreshUser.pending, (state) => {
+        state.refreshUserRequest = true;
+        state.refreshUserError = undefined;
+      })
+      .addCase(refreshUser.fulfilled, (state) => {
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+        state.refreshUserRequest = false;
       })
-      .addCase(refreshUser.rejected, (state) => {
+      .addCase(refreshUser.rejected, (state, action) => {
         state.isAuthChecked = true;
+        state.refreshUserRequest = false;
+        state.refreshUserError = action.error.message;
       })
+
       .addCase(logoutUser.fulfilled, (state) => {
         state.data = null;
         state.isAuthenticated = false;
@@ -199,7 +207,7 @@ export const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.loginUserError = action.payload ?? 'Неизвестная ошибка';
+        state.loginUserError = action.error.message;
       });
   }
 });

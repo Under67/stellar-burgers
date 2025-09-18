@@ -32,11 +32,12 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
+        data-cy='oneBun'
       >
         Выберите булки
       </div>
     )}
-    <ul className={styles.elements}>
+    <ul className={styles.elements} data-cy='filling'>
       {constructorItems.ingredients.length > 0 ? (
         constructorItems.ingredients.map(
           (item: TConstructorIngredient, index: number) => (
@@ -69,6 +70,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+        data-cy='twoBun'
       >
         Выберите булки
       </div>
@@ -98,7 +100,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         onClose={closeOrderModal}
         title={orderRequest ? 'Оформляем заказ...' : ''}
       >
-        <OrderDetailsUI orderNumber={orderModalData.number} />
+        <OrderDetailsUI orderNumber={orderModalData} />
       </Modal>
     )}
   </section>
